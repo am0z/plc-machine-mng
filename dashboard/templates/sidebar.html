@@ -1,0 +1,133 @@
+<!-- Sidebar -->
+{% load admin_urls %}
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center"
+       href="{% url 'dashboard' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">PLC State</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'dashboard' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Dummy Data
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'machine_status_list' %}">
+            <i class="fas fa-fw fa-list"></i>
+            <span>Data List</span></a>
+        {% if dashboard_user.is_superuser %}
+            <a class="nav-link" href="{% url 'dummy_add' %}">
+                <i class="fas fa-fw fa-plus-square"></i>
+                <span>Add Data</span></a>
+        {% endif %}
+
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        PLC Machines
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'machines_list' %}">
+            <i class="fas fa-fw fa-list"></i>
+            <span>Machines List</span></a>
+        {% if dashboard_user.is_superuser %}
+            <a class="nav-link" href="{% url 'machine_add' %}">
+                <i class="fas fa-fw fa-plus-square"></i>
+                <span>Add Machine</span></a>
+        {% endif %}
+
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Charts
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'status_chart' %}">
+            <i class="fas fa-fw fa-list"></i>
+            <span>Status Chart</span></a>
+    </li>
+
+    {% if dashboard_user.is_staff %}
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        Administration
+    </div>
+    <li class="nav-item">
+
+
+            <a class="nav-link" href="{% url 'admin:auth_user_add' %}" target="_blank">
+                <i class="fas fa-fw fa-user-edit"></i>
+                <span>Add a user</span></a>
+            <a class="nav-link" href="{% url 'admin:auth_user_changelist' %}" target="_blank">
+                <i class="fas fa-fw fa-list-ul"></i>
+                <span>User Management</span></a>
+            <a class="nav-link" href="{% url 'admin:index' %}" target="_blank">
+                <i class="fas fa-fw fa-solar-panel"></i>
+                <span>Admin Panel</span></a>
+
+    </li>
+    {% endif %}
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+<!-- End of Sidebar -->
+<script>
+    $(document).ready(function () {
+        $('#confirm-delete-on-accounts').on('show.bs.modal', function (e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        });
+    });
+</script>
+<div class="modal fade" id="confirm-delete-on-accounts" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete all filters on all accounts
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete all filters on your gmail accounts?
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger btn-ok" href="#">Delete All</a>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

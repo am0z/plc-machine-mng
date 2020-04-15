@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Status Chart{% endblock %}
+
+{% block content %}
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Status Chart</h1>
+    </div>
+    <form role="form" class="" id="chat-draw" method="post" action="{% url 'status_chart' %}">{% csrf_token %}
+        <input type="hidden" name="machines" id="machines" value=""/>
+
+{#    Machine Sort Section#}
+    <div class="row">
+{#        Machine List Card#}
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Machine List</h6>
+                </div>
+                <div class="card-body">
+
+                    <ul id="sortable1" class="list-group connectedSpace">
+                        {% for machine in machines %}
+                            <li class="list-group-item list-group-item-action list-group-item-success">
+                                {{ machine.name }}
+                                <input type="hidden" value="{{ machine.id }}" name="ids[]">
+                            </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+{#        Chart Machine List Card#}
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Chat Machine List</h6>
+                </div>
+                <div class="card-body">
+
+                    <ul id="sortable2" class="list-group connectedSpace">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+{#        Datepicker Card#}
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Period</h6>
+                </div>
+                <div class="card-body">
+                    <label for="start_timestamp">Start:</label>
+                    <div class='col-md-12' style="">
+                        <div class="form-group">
+                            <div class="input-group date" id="datetimepicker7" data-target-input="nearest">
+                                <input type="text" data-format="YYYY-MM-DD HH:mm:ss" name="start_timestamp" class="form-control datetimepicker-input"
+                                       data-target="#datetimepicker7"/>
+                                <div class="input-group-append" data-target="#datetimepicker7"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="end_timestamp">End:</label>
+                    <div class='col-md-12' style="">
+                        <div class="form-group">
+                            <div class="input-group date" id="datetimepicker8" data-target-input="nearest">
+                                <input type="text" name="end_timestamp" class="form-control datetimepicker-input"
+                                       data-target="#datetimepicker8"/>
+                                <div class="input-group-append" data-target="#datetimepicker8"
+                                     data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <label for="end_timestamp">Email:</label>
+                    <div class='col-md-12' style="">
+                        <div class="form-group">
+                            <input name="email" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button id="chat-show" class="btn btn-primary btn-icon-split float-right m-2">
+                          <span class="text">Show Chart</span>
+                        </button>
+
+                        <button id="chat-send" class="btn btn-success btn-icon-split float-right m-2">
+                          <span class="text">Send Mail</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="mail_send" name="mail_send" value="0"/>
+    </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                      <h6 class="m-0 font-weight-bold text-primary">Chart Body</h6>
+
+                </div>
+                <div class="card-body">
+                    {% if image_base64 != '' %}
+                    <img src="data:image/png;base64,{{image_base64}}" alt="some text to display to your users when the image does not show correctly" width=500 height=auto />
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<style>
+  #sortable1, #sortable2 {
+    border: 1px solid #eee;
+    min-height: 40px;
+    margin: 0;
+    {#padding: 5px 0 0 0;#}
+    {#margin-right: 10px;#}
+  }
+
+</style>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$(document).ready(function () {
+  $('#machines').val('');
+  $(function() {
+      $( "#sortable1, #sortable2" ).sortable({
+          connectWith: ".connectedSpace"
+        }).disableSelection();
+  });
+    $('#datetimepicker7').datetimepicker({
+      useCurrent: false,
+      //minDate: new Date() + 1,
+      format: 'YYYY-MM-DD HH:mm:ss',
+      icons: {
+        time: 'fa fa-clock',
+        date: 'fa fa-calendar',
+        up: 'fa fa-arrow-up',
+        down: 'fa fa-arrow-down',
+        previous: 'fa fa-chevron-left',
+        next: 'fa fa-chevron-right',
+        today: 'fa fa-calendar-check-o',
+        clear: 'fa fa-trash',
+        close: 'fa fa-times'
+      }
+    });
+    $('#datetimepicker8').datetimepicker({
+      useCurrent: false,
+      //minDate: new Date() + 1,
+      format: 'YYYY-MM-DD HH:mm:ss',
+      icons: {
+        time: 'fa fa-clock',
+        date: 'fa fa-calendar',
+        up: 'fa fa-arrow-up',
+        down: 'fa fa-arrow-down',
+        previous: 'fa fa-chevron-left',
+        next: 'fa fa-chevron-right',
+        today: 'fa fa-calendar-check-o',
+        clear: 'fa fa-trash',
+        close: 'fa fa-times'
+      }
+    });
+
+    $("#datetimepicker7").on("dp.change", function (e) {
+      $('#datetimepicker8').datetimepicker('minDate', e.date);
+    });
+    $("#datetimepicker8").on("dp.change", function (e) {
+      $('#datetimepicker7').datetimepicker('maxDate', e.date);
+    });
+
+    $('#chat-show').on('click', function () {
+      ids = [];
+      $("#sortable2 input[name='ids[]']").each(
+        function () {
+          ids.push($(this).val());
+        }
+      );
+      $('#machines').val(ids.join(','));
+      $('#mail_send').val('');
+      $('#chat-draw').submit();
+    });
+    $('#chat-send').on('click', function () {
+      ids = [];
+      $("#sortable2 input[name='ids[]']").each(
+        function () {
+          ids.push($(this).val());
+        }
+      );
+      $('#machines').val(ids.join(','));
+      $('#mail_send').val('send');
+      $('#chat-draw').submit();
+    });
+});
+
+
+</script>
+{% endblock %}
