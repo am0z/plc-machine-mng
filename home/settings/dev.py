@@ -34,3 +34,4 @@ else:
         }
     }
 
+DATABASES["default"].update(dj_database_url.parse(os.getenv("DATABASE_URL")))

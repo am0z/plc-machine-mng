@@ -56,6 +56,7 @@ CRON_CLASSES = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -130,41 +131,3 @@ CLIENTSECRETS_LOCATION = os.path.join(BASE_DIR, 'credentials.json')  # will not 
 
 GAPI_REDIRECT_URL = '/dashboard/gmail_auth_callback'
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-
-    'formatters': {
-        'verbose': {
-            'format': '{levelname}\t {asctime}\t {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'apps.log'),
-            # 'class': 'logging.handlers.RotatingFileHandler',
-            # 'maxBytes': 1024*1024*0.1, # 5 MB
-            # 'backupCount': 5,
-            'formatter': 'verbose'
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    },
-}
